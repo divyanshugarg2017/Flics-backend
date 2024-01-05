@@ -8,10 +8,10 @@ const registerUser = asyncHandler( async(req,res)=>{
    //get user details from frontend
    const {fullName, email, username, password} = req.body
    //validation
-   if([fullName, email, userrname, password].some((field)=> field?.trim()==="")){
+   if([fullName, email, username, password].some((field)=> field?.trim()==="")){
     throw new ApiError(400,"All fields are compulsary or required")
    }
-   const existingUser = User.findOne({
+   const existingUser = await User.findOne({
     $or:[{username},{email}]
    })
 

@@ -104,7 +104,7 @@ const loginUser = asyncHandler(async(req,res)=> {
    if(!isPasswordValid){
       throw new ApiError(401,"Invalid user credentials")
    }
-   //access nad refresh token generation and send
+   //access and refresh token generation and send
    const {accessToken,refreshToken} = await generateAccessAndRefreshToken(user._id)
    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
    //send cookie
@@ -125,7 +125,22 @@ const loginUser = asyncHandler(async(req,res)=> {
 })
 
 const logoutUser = asyncHandler(async(req,res) => {
-   
+   await User.findByIdAndUpdate(req.user._id,{
+      $set: {
+         refreshToken : undefined
+      }
+   },{
+      new:true
+   }) 
+
+   const options ={
+      httpOnly:true,
+      secure:true
+   }
+   return res.status(200)
+   .clearCookie("accessToken",options)
+   .clearCookie("refreshToken",options)
+   .json(new apiResponse(200,{},"User logged out successfully"))
 })
 
-export {registerUser,loginUser} 
+export {registerUser,loginUser,logoutUser} 

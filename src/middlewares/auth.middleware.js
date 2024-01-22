@@ -1,7 +1,7 @@
-import { asyncHandler } from "../utils/asyncHandler"
-import { User } from "../models/user.model"
+import { asyncHandler } from "../utils/asyncHandler.js"
+import { User } from "../models/user.model.js"
 import  Jwt  from "jsonwebtoken"
-import { ApiError } from "../utils/apiError"
+import { ApiError } from "../utils/apiError.js"
 
 export const verifyJWT =  asyncHandler(async(req,_,next)=> {
     //underscore is used when the relevant req and res in not in use in this case res object is not in use
